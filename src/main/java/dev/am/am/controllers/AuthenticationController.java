@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("auth")
-public class AuthenticationController {
+public class    AuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -54,7 +54,7 @@ public class AuthenticationController {
             throw new ApiRequestException("Email já cadastrado!",HttpStatus.BAD_REQUEST);
         }
         String encrytpedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.fullName(),data.email(),encrytpedPassword, UserRole.USER);
+        User newUser = new User("",data.fullName(),data.email(),encrytpedPassword, UserRole.USER);
         this.repository.save(newUser);
         return ResponseEntity.ok().build();
     }

@@ -53,7 +53,7 @@ public class SecurityConfiguration {
 
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173","http://advogapp-front.s3-website.us-east-2.amazonaws.com"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedHeaders(List.of("*"));
