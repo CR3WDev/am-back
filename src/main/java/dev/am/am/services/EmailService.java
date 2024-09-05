@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class EmailService{
+public class EmailService {
 
     @Autowired
     EmailRepository emailRepository;
@@ -35,13 +35,12 @@ public class EmailService{
             emailSender.send(message);
 
             emailModel.setStatusEmail(StatusEmail.SENT);
-        } catch (MailException e){
-                emailModel.setStatusEmail(StatusEmail.ERROR);
+        } catch (MailException e) {
+            emailModel.setStatusEmail(StatusEmail.ERROR);
 
         } finally {
             return emailRepository.save(emailModel);
         }
-
 
     }
 }

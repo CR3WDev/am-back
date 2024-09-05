@@ -1,4 +1,6 @@
 package dev.am.am.dto.User;
 
-public record UserResponseDTO(String id,String fullName,String email) {
+import java.util.UUID;
+
+public record UserResponseDTO(UUID id, String fullName, String email) {
 }

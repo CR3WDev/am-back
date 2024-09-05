@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("auth")
-public class    AuthenticationController {
+public class AuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -36,25 +36,26 @@ public class    AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(),data.password());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         try {
             var auth = this.authenticationManager.authenticate(usernamePassword);
             User userAuth = (User) auth.getPrincipal();
             var token = tokenService.generateToken(userAuth);
-            return ResponseEntity.ok(new LoginResponseDTO(token,userAuth.getId(),userAuth.getRole().getName()));
-        }catch(AuthenticationException authenticationException) {
-            throw new ApiRequestException("Usuário ou senha inválido!",HttpStatus.BAD_REQUEST);
+            return ResponseEntity
+                    .ok(new LoginResponseDTO(token, userAuth.getId(), userAuth.getRole().getName()));
+        } catch (AuthenticationException authenticationException) {
+            throw new ApiRequestException("Usuário ou senha inválido!", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
-      Optional<User> user = this.repository.findByEmail(data.email());
-        if(user.isPresent()) {
-            throw new ApiRequestException("Email já cadastrado!",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
+        Optional<User> user = this.repository.findByEmail(data.email());
+        if (user.isPresent()) {
+            throw new ApiRequestException("Email já cadastrado!", HttpStatus.BAD_REQUEST);
         }
         String encrytpedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User("",data.fullName(),data.email(),encrytpedPassword, UserRole.USER);
+        User newUser = new User(null, data.fullName(), data.email(), encrytpedPassword, UserRole.USER);
         this.repository.save(newUser);
         return ResponseEntity.ok().build();
     }

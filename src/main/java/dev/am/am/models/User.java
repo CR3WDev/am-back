@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "users")
 @Entity(name = "users")
@@ -21,7 +22,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
     private String fullName;
     private String email;
     @JsonIgnore
@@ -30,13 +31,14 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRole.GOD) return List.of(new SimpleGrantedAuthority("ROLE_GOD"),new SimpleGrantedAuthority("ROLE_USER") );
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-
+        if (this.role == UserRole.GOD)
+            return List.of(new SimpleGrantedAuthority("ROLE_GOD"), new SimpleGrantedAuthority("ROLE_USER"));
+        else
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
     }
 
-    public User(String id, String fullName, String email, UserRole role) {
+    public User(UUID id, String fullName, String email, UserRole role) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;

@@ -1,6 +1,6 @@
 package dev.am.am.dto.security;
 
-import java.util.Optional;
+import java.util.UUID;
 
-public record LoginResponseDTO(String token, String userId, String role) {
+public record LoginResponseDTO(String token, UUID userId, String role) {
 }

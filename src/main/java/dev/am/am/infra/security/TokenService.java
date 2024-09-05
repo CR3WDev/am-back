@@ -22,14 +22,14 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(user.getEmail())
-                    .withClaim("role",user.getRole().getName())
-                    .withClaim("userId",user.getId())
+                    .withClaim("role", user.getRole().getName())
+                    .withClaim("userId", user.getId().toString())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
 
             return token;
-        }catch (JWTCreationException exception) {
-            throw new RuntimeException("Error while generating token",exception);
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Error while generating token", exception);
         }
     }
 
@@ -41,7 +41,7 @@ public class TokenService {
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch(JWTCreationException exception) {
+        } catch (JWTCreationException exception) {
             return exception.getMessage();
         }
     }

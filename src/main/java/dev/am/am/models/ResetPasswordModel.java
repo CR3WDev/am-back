@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reset_password")
@@ -17,8 +18,9 @@ public class ResetPasswordModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
     private String token;
-    private String userId;
+    private UUID userId;
     private String expirationTime;
+
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -32,24 +33,24 @@ public class UserService {
     private ObjectMapper objectMapper;
 
     public UserResponseDTO convertToDTO(User user) {
-        return new UserResponseDTO(user.getId(), user.getFullName(),user.getEmail());
+        return new UserResponseDTO(user.getId(), user.getFullName(), user.getEmail());
     }
 
-    public Optional<User> findById(String id) {
+    public Optional<User> findById(UUID id) {
         return repository.findById(id);
     }
 
     public Optional<User> findByEmail(String email) {
         return repository.findByEmail(email);
     }
+
     public UserDetails findUserByEmail(String email) {
         return repository.findUserByEmail(email);
     }
 
-
     public User updateUser(UserRequestDTO user) {
         Optional<User> userFound = findById(user.id());
-        if(userFound.isEmpty()){
+        if (userFound.isEmpty()) {
             throw new ApiRequestException("Usuário Não encontrado!", HttpStatus.BAD_REQUEST);
         }
         User newUser = userFound.get();
@@ -63,7 +64,7 @@ public class UserService {
 
     public EmailModel recoverPassword(String email) {
         Optional<User> userFound = findByEmail(email);
-        if(userFound.isEmpty()){
+        if (userFound.isEmpty()) {
             throw new ApiRequestException("Usuário Não encontrado!", HttpStatus.BAD_REQUEST);
         }
 
@@ -79,19 +80,19 @@ public class UserService {
         return emailService.sendEmail(emailModel);
     }
 
-    public ResetPasswordModel resetPassword(String token,String password) {
-      Optional<ResetPasswordModel> resetPasswordModel =  resetPasswordService.findByToken(token);
-      if(resetPasswordModel.isEmpty()) {
-          throw new ApiRequestException("Token Inválido!", HttpStatus.BAD_REQUEST);
-      }
-      Optional<User> user = findById(resetPasswordModel.get().getUserId());
-      if(user.isEmpty()) {
-          throw new ApiRequestException("Token Inválido!", HttpStatus.BAD_REQUEST);
-      }
-      User userFounded = user.get();
-      String encrytpedPassword = new BCryptPasswordEncoder().encode(password);
-      userFounded.setPassword(encrytpedPassword);
-      update(userFounded);
-      return resetPasswordModel.get();
+    public ResetPasswordModel resetPassword(String token, String password) {
+        Optional<ResetPasswordModel> resetPasswordModel = resetPasswordService.findByToken(token);
+        if (resetPasswordModel.isEmpty()) {
+            throw new ApiRequestException("Token Inválido!", HttpStatus.BAD_REQUEST);
+        }
+        Optional<User> user = findById(resetPasswordModel.get().getUserId());
+        if (user.isEmpty()) {
+            throw new ApiRequestException("Token Inválido!", HttpStatus.BAD_REQUEST);
+        }
+        User userFounded = user.get();
+        String encrytpedPassword = new BCryptPasswordEncoder().encode(password);
+        userFounded.setPassword(encrytpedPassword);
+        update(userFounded);
+        return resetPasswordModel.get();
     }
 }

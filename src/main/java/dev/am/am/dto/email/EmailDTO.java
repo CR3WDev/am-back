@@ -1,5 +1,7 @@
 package dev.am.am.dto.email;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -8,7 +10,7 @@ import lombok.Data;
 public class EmailDTO {
 
     @NotBlank
-    private String userId;
+    private UUID userId;
     @NotBlank
     @Email
     private String emailFrom;
