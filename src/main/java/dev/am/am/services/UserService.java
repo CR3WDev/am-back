@@ -73,7 +73,7 @@ public class UserService {
 
         EmailModel emailModel = new EmailModel();
         emailModel.setSubject("Recuperação de Senha");
-        emailModel.setText("http://localhost:5173/changepassword?params=" + new String(encodeToken));
+        emailModel.setText("http://localhost:5173/auth/newpassword?params=" + new String(encodeToken));
         emailModel.setUserId(userFound.get().getId());
         emailModel.setEmailTo(email);
 

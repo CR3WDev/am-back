@@ -1,13 +1,15 @@
 package dev.am.am.controllers;
 
-import dev.am.am.dto.security.LoginResponseDTO;
+import dev.am.am.dto.security.*;
 import dev.am.am.exceptions.ApiRequestException;
+import dev.am.am.models.EmailModel;
+import dev.am.am.models.ResetPasswordModel;
 import dev.am.am.repositories.UserRepository;
-import dev.am.am.dto.security.LoginRequestDTO;
-import dev.am.am.dto.security.RegisterDTO;
 import dev.am.am.enums.UserRole;
 import dev.am.am.infra.security.TokenService;
 import dev.am.am.models.User;
+import dev.am.am.services.EmailService;
+import dev.am.am.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,8 @@ public class AuthenticationController {
     private UserRepository repository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO data) {
@@ -58,5 +62,17 @@ public class AuthenticationController {
         User newUser = new User(null, data.fullName(), data.email(), encrytpedPassword, UserRole.USER);
         this.repository.save(newUser);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/recoverpassword")
+    public ResponseEntity<EmailModel> recoverEmail(@RequestBody @Valid RecoverPasswordDTO recoverPasswordDTO){
+        userService.recoverPassword(recoverPasswordDTO.email());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/resetpassword")
+    public ResponseEntity<ResetPasswordModel> resetPassword(@RequestBody @Valid ResetPasswordDTO resetPasswordDTO){
+        ResetPasswordModel resetPasswordModel = userService.resetPassword(resetPasswordDTO.token(),resetPasswordDTO.password());
+        return new ResponseEntity<>(resetPasswordModel, HttpStatus.CREATED);
     }
 }
