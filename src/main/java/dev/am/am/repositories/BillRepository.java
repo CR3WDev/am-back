@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BillRepository extends JpaRepository<BillModel, UUID> {
 
-    @Query("SELECT b FROM BillModel b WHERE b.user.id = :userId")
+    @Query("SELECT b FROM BillModel b WHERE b.user.id = :userId order by b.createdAt")
     List<BillModel> findAllByUserId(UUID userId);
 
 }
