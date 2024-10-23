@@ -41,7 +41,7 @@ public class BillsController {
             return ResponseEntity.ok().body(billService.findById(id));
     }
     
-    @PutMapping()
+    @PutMapping("/{id}")
     public ResponseEntity<Bill> update(@RequestBody Bill bill) {
     	return ResponseEntity.ok().body(billService.update(bill));
     }

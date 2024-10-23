@@ -3,6 +3,8 @@ package dev.am.am.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.am.am.dto.User.UserRequestDTO;
 import dev.am.am.dto.User.UserResponseDTO;
+import dev.am.am.dto.security.RegisterDTO;
+import dev.am.am.enums.UserRole;
 import dev.am.am.exceptions.ApiRequestException;
 import dev.am.am.models.EmailModel;
 import dev.am.am.models.ResetPasswordModel;
@@ -60,6 +62,17 @@ public class UserService {
 
     public User update(User user) {
         return repository.save(user);
+    }
+
+    public User save(RegisterDTO data) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        User newUser = new User();
+        newUser.setFullName(data.fullName());
+        newUser.setEmail(data.email());
+        newUser.setPassword(encryptedPassword);
+        newUser.setRole(UserRole.USER);
+
+       return this.repository.save(newUser);
     }
 
     public EmailModel recoverPassword(String email) {

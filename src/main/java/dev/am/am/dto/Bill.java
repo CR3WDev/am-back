@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import dev.am.am.enums.BillType;
 import lombok.*;
+
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Getter
@@ -19,5 +21,8 @@ public class Bill {
     private String name;
     private Number estimatedValue;
     private Number paidValue;
+    private UUID userId;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
 }
